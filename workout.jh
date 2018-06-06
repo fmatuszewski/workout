@@ -1,0 +1,70 @@
+entity Exercise {
+name String
+description String
+image ImageBlob
+}
+entity ExerciseExample {
+link String
+}
+entity Workout {
+name String
+description String
+}
+entity WorkoutExercise {
+duration Integer
+frequency Integer
+unit UNIT
+}
+enum UNIT{
+MINUTES,SECONDS,REPS
+}
+entity WoD{
+date LocalDate
+place String
+link String
+}
+entity UserInfo{
+isCoach Boolean
+level Integer
+}
+
+entity Team{
+name String
+description String
+logo ImageBlob
+}
+entity Equipment{
+name String
+description String
+infoLink String
+constructionLink String
+shopLink String
+}
+
+relationship OneToMany {
+	Exercise{example} to ExerciseExample
+    Workout{we} to WorkoutExercise
+    WoD{organizer} to UserInfo
+}
+relationship ManyToOne{
+	WoD to Workout{wod}
+	WorkoutExercise to Exercise{we}
+
+}
+relationship ManyToMany{
+	WoD{users} to UserInfo{wod}
+    Team{user} to UserInfo
+    UserInfo to Equipment
+}
+
+
+// Set pagination options
+paginate JobHistory, Employee with infinite-scroll
+paginate Job with pagination
+
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+// Set an angular suffix
+angularSuffix * with mySuffix
